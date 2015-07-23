@@ -12,6 +12,7 @@ local function list()
   for key, value in pairs(lunchOptions) do
     local optionValues = red:hgetall("lunch.options:" .. value);
     local option = red:array_to_hash(optionValues); 
+    option['id'] = value;
     table.insert(data, option); 
   end
   local response = json.encode(data);
@@ -19,7 +20,13 @@ local function list()
 end
 
 local function create()
- -- todo: get new id, save new hash with name from request param, add new id to list, return id
+  local new_id = red:incr('lunch.options.id.sequence');
+  ngx.req.read_body();
+  local data = ngx.req.get_post_args();
+  
+  red:hmset("lunch.options:" .. new_id, "name", data['name'], "count", 0);
+  red:sadd("lunch.options", new_id);
+  ngx.say(new_id);
 end
 
 if ngx.req.get_method() == "GET" then

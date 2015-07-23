@@ -8,14 +8,15 @@
 <div class="container">
   <div class="jumbotron" id="lunch_decider">
     <h1>Where do we eat lunch today?</h1>
-    <button class="btn btn-primary" onclick="getLunchOption()">Press to find out!</button>
+    <button class="btn btn-primary" data-bind="click: getLunchOption">Press to find out!</button>
     <h2>And the answer is:</h2>
     <p data-bind="text: lunchOption().name">...</p>
   </div>
-  <div class="row">
+
+  <div class="row" id="lunch_options">
     <div id="add_lunch_option" class="col-md-7">
       <h3>Submit new lunch place</h3>
-      <form onsubmit="addNewLunchOption(this, event);">
+      <form data-bind="submit: addNewLunchOption">
         <div class="form-group">
           <label for="new_lunch_place_name">Name</label>
           <input class="form-control" type="text" required="required" name="name" id="new_lunch_place_name"/>
@@ -24,71 +25,25 @@
       </form>
     </div>
    
-    <div id="list_lunch_options" class="col-md-5">
+    <div class="col-md-5">
       <h3>List of lunch places</h3>
       <table class="table table-striped table-bordered">
         <thead>
           <td>name</td>
           <td>visit count</td>
           <td>last visit</td>
+          <td>actions</td>
         </thead>
         <tbody data-bind="foreach: options">
           <td data-bind="text: name"></td>
           <td data-bind="text: count"></td>
           <td></td>
+          <td><button class="btn btn-xs btn-danger" data-bind="click: $parent.removeOption">remove</button></td>
       </table>
     </div>
 </div>
 
 <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.1.0.js"></script>
-<script type="text/javascript">
-function LunchOptionModel(lunchOption) {
-  this.lunchOption = ko.observable(lunchOption);
-}
-
-function AvailableOptionsModel() {
-  this.options = ko.observableArray();
-}
-
-var chosenLunch = new LunchOptionModel({name: '...'});
-ko.applyBindings(chosenLunch, document.getElementById('lunch_decider'));
-var lunchOptions = new AvailableOptionsModel();
-ko.applyBindings(lunchOptions, document.getElementById('list_lunch_options'));
-
-function getLunchOption() {
-  function randomOptionLoaded() {
-    chosenLunch.lunchOption(JSON.parse(this.responseText));
-  }
-  chosenLunch.lunchOption({name: 'calculating...'});
-  var request = new XMLHttpRequest();
-  request.onload = randomOptionLoaded;
-  request.open('get', '/random', true);
-  request.send();
-}
-
-function loadAvailableOptions() {
-  function loaded() {
-    lunchOptions.options(JSON.parse(this.responseText));
-  }
-  var request = new XMLHttpRequest();
-  request.onload = loaded;
-  request.open('get', '/options', true);
-  request.send();
-}
-
-function addNewLunchOption(form, event) {
-  event.preventDefault();
-
-  function submitted() {
-    console.log(form.name.value, ' added');
-  }
-  var request = new XMLHttpRequest();
-  request.onload = submitted;
-  request.open('post', '/options', true);
-  request.send(new FormData(form));
-}
-
-loadAvailableOptions();
-</script>
+<script type="text/javascript" src="lunch.js"></script>
 </body>
 </html>
