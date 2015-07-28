@@ -21,6 +21,7 @@ function AvailableOptionsModel() {
   this.addNewLunchOption = function(form) {
     function submitted() {
       self.options.push({id: this.responseText, name: form.name.value, count: 0});
+      form.name.value = '';
     }
     var request = new XMLHttpRequest();
     request.onload = submitted;

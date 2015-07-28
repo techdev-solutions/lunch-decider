@@ -3,14 +3,17 @@
 <head>
 <title>techdev lunch decider</title>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 </head>
 <body>
 <div class="container">
-  <div class="jumbotron" id="lunch_decider">
-    <h1>Where do we eat lunch today?</h1>
-    <button class="btn btn-primary" data-bind="click: getLunchOption">Press to find out!</button>
-    <h2>And the answer is:</h2>
-    <p data-bind="text: lunchOption().name">...</p>
+  <div class="row">
+    <div class="jumbotron" id="lunch_decider">
+      <h1>Where do we eat lunch today?</h1>
+      <button class="btn btn-primary" data-bind="click: getLunchOption">Press to find out!</button>
+      <h2>And the answer is:</h2>
+      <p data-bind="text: lunchOption().name">...</p>
+    </div>
   </div>
 
   <div class="row" id="lunch_options">
